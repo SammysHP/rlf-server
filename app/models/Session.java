@@ -40,4 +40,11 @@ public class Session extends Model {
 	@Column(nullable = true)
 	public List<Question> questions = new ArrayList<>();
 
+	public static Finder find = new Finder(Long.class, Session.class);
+
+	public Session(String owner, String name) {
+		this.owner = owner;
+		this.name = name;
+		this.open = true;
+	}
 }

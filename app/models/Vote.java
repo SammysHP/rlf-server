@@ -20,6 +20,7 @@ public class Vote extends Model {
 	public String id;
 
 	@ManyToOne
+	@Constraints.Required
 	public Session session;
 
 	@Constraints.Required
@@ -43,6 +44,15 @@ public class Vote extends Model {
 
 		@EnumValue("R")
 		REQUEST,
+	}
+
+	public static Finder find = new Finder(Long.class, Vote.class);
+
+	public Vote(Session session, String owner, Type type, Integer vote) {
+		this.session = session;
+		this.owner = owner;
+		this.type = type;
+		this.vote = vote;
 	}
 
 }

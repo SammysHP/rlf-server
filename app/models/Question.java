@@ -22,6 +22,7 @@ public class Question extends Model {
 	public String id;
 
 	@ManyToOne
+	@Constraints.Required
 	public Session session;
 
 	@Constraints.Required
@@ -35,5 +36,12 @@ public class Question extends Model {
 	@OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
 	@Column(nullable = true)
 	public List<QuestionAnswer> answers = new ArrayList<>();
+
+	public static Finder find = new Finder(Long.class, Question.class);
+
+	public Question(Session session, String question) {
+		this.session = session;
+		this.question = question;
+	}
 
 }

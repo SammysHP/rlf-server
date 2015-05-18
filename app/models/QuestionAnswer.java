@@ -19,6 +19,7 @@ public class QuestionAnswer extends Model {
 	public String id;
 
 	@ManyToOne
+	@Constraints.Required
 	public Question question;
 
 	@Constraints.Required
@@ -42,6 +43,14 @@ public class QuestionAnswer extends Model {
 
 		@EnumValue("D")
 		D,
+	}
+
+	public static Finder find = new Finder(Long.class, QuestionAnswer.class);
+
+	public QuestionAnswer(Question question, String owner, Answer answer) {
+		this.question = question;
+		this.owner = owner;
+		this.answer = answer;
 	}
 
 }
