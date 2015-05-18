@@ -11,6 +11,8 @@ import play.data.format.Formats;
 import play.data.validation.Constraints;
 import play.db.ebean.Model;
 
+import com.avaje.ebean.annotation.EnumValue;
+
 @Entity
 public class Vote extends Model {
 
@@ -28,5 +30,19 @@ public class Vote extends Model {
 
 	@Column(nullable = true)
 	public Integer vote;
+	
+	@Constraints.Required
+	public Type type;
+
+	public enum Type {
+		@EnumValue("S")
+		SPEED,
+
+		@EnumValue("C")
+		COMPREHENSIBILITY,
+
+		@EnumValue("A")
+		ANNOUNCEMENT,
+	}
 
 }
