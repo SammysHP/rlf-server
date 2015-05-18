@@ -30,7 +30,7 @@ public class Vote extends Model {
 
 	@Column(nullable = true)
 	public Integer vote;
-	
+
 	@Constraints.Required
 	public Type type;
 
@@ -38,11 +38,11 @@ public class Vote extends Model {
 		@EnumValue("S")
 		SPEED,
 
-		@EnumValue("C")
-		COMPREHENSIBILITY,
+		@EnumValue("U")
+		UNDERSTANDABILITY,
 
-		@EnumValue("A")
-		ANNOUNCEMENT,
+		@EnumValue("R")
+		REQUEST,
 	}
 
 }
