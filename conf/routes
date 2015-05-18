@@ -2,8 +2,23 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-# Home page
-GET     /                           controllers.Application.index()
+# Session
+GET     /sessions                controllers.SessionController.getSessions
+GET     /sessions/:id            controllers.SessionController.getSession(id: String)
+POST    /sessions                controllers.SessionController.createSession
+PUT     /sessions/:id            controllers.SessionController.updateSession(id: String)
+DELETE  /sessions/:id/:owner     controllers.SessionController.deleteSession(id: String, owner: String)
+GET     /sessions/:id/votes      controllers.SessionController.getVotes(id: String)
+GET     /sessions/:id/questions  controllers.SessionController.getQuestions(id: String)
 
-# Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.at(path="/public", file)
+# Question
+GET     /questions/:id           controllers.QuestionController.getQuestion(id: String)
+POST    /questions/:id           controllers.QuestionController.createQuestion(id: String)
+PUT     /questions/:id           controllers.QuestionController.updateQuestion(id: String)
+DELETE  /questions/:id/:owner    controllers.QuestionController.deleteQuestion(id: String, owner: String)
+
+GET     /questions/:id/answers   controllers.QuestionController.getAnswers(id: String)
+POST    /questions/:id/answers   controllers.QuestionController.createAnswer(id: String)
+
+# Vote
+POST    /votes/:id               controllers.VoteController.createVote(id: String)
