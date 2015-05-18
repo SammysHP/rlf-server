@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -32,9 +33,11 @@ public class Session extends Model {
 	public Boolean open;
 
 	@OneToMany(mappedBy = "session", cascade = CascadeType.ALL)
+	@Column(nullable = true)
 	public List<Vote> votes = new ArrayList<>();
 
 	@OneToMany(mappedBy = "session", cascade = CascadeType.ALL)
+	@Column(nullable = true)
 	public List<Question> questions = new ArrayList<>();
 
 }

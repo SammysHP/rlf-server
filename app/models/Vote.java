@@ -2,6 +2,7 @@ package models;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -25,6 +26,7 @@ public class Vote extends Model {
 	@Formats.DateTime(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date date = new Date();
 
+	@Column(nullable = true)
 	public Integer vote;
 
 }

@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -32,6 +33,7 @@ public class Question extends Model {
 	public Boolean open;
 
 	@OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
+	@Column(nullable = true)
 	public List<QuestionAnswer> answers = new ArrayList<>();
 
 }
