@@ -20,7 +20,7 @@ public class QuestionAnswer extends Model {
 
 	@ManyToOne
 	@Constraints.Required
-	public Question question;
+	public Session session;
 
 	@Constraints.Required
 	public String owner;
@@ -47,8 +47,8 @@ public class QuestionAnswer extends Model {
 
 	public static Finder find = new Finder(Long.class, QuestionAnswer.class);
 
-	public QuestionAnswer(Question question, String owner, Answer answer) {
-		this.question = question;
+	public QuestionAnswer(Session session, String owner, Answer answer) {
+		this.session = session;
 		this.owner = owner;
 		this.answer = answer;
 	}

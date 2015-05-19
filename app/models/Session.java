@@ -36,9 +36,12 @@ public class Session extends Model {
 	@Column(nullable = true)
 	public List<Vote> votes = new ArrayList<>();
 
+	@Formats.DateTime(pattern = "yyyy-MM-dd HH:mm:ss")
+	public Date resetDate = new Date();
+
 	@OneToMany(mappedBy = "session", cascade = CascadeType.ALL)
 	@Column(nullable = true)
-	public List<Question> questions = new ArrayList<>();
+	public List<QuestionAnswer> questionAnswers = new ArrayList<>();
 
 	public static Finder find = new Finder(Long.class, Session.class);
 
@@ -47,4 +50,11 @@ public class Session extends Model {
 		this.name = name;
 		this.open = true;
 	}
+
+  public void resetAnswers() {
+    this.date = new Date();
+    for (QuestionAnswer a: this.questionAnswers) {
+      a.delete();
+    }
+  }
 }

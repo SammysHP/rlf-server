@@ -3,22 +3,19 @@
 # ~~~~
 
 # Session
-GET     /sessions                controllers.SessionController.getSessions
-GET     /sessions/:id            controllers.SessionController.getSession(id: String)
-POST    /sessions                controllers.SessionController.createSession
-PUT     /sessions/:id            controllers.SessionController.updateSession(id: String)
-DELETE  /sessions/:id/:owner     controllers.SessionController.deleteSession(id: String, owner: String)
-GET     /sessions/:id/votes      controllers.SessionController.getVotes(id: String)
-GET     /sessions/:id/questions  controllers.SessionController.getQuestions(id: String)
+GET     /sessions/byowner/:owner     controllers.SessionController.getSessions(owner: String)
+GET     /sessions/:sid               controllers.SessionController.getSession(sid: String)
+POST    /sessions                    controllers.SessionController.createSession
+PUT     /sessions/:sid               controllers.SessionController.updateSession(sid: String)
+DELETE  /sessions/:sid/:owner        controllers.SessionController.deleteSession(sid: String, owner: String)
+GET     /sessions/:sid/votes         controllers.SessionController.getVotes(sid: String)
+GET     /sessions/:sid/answers       controllers.SessionController.getAnswers(sid: String)
+POST    /sessions/:sid/resetanswers/:owner  controllers.SessionController.resetAnswers(sid: String, owner: String)
 
-# Question
-GET     /questions/:id           controllers.QuestionController.getQuestion(id: String)
-POST    /questions/:id           controllers.QuestionController.createQuestion(id: String)
-PUT     /questions/:id           controllers.QuestionController.updateQuestion(id: String)
-DELETE  /questions/:id/:owner    controllers.QuestionController.deleteQuestion(id: String, owner: String)
+# TODO: aggregierte daten abfragen
 
-GET     /questions/:id/answers   controllers.QuestionController.getAnswers(id: String)
-POST    /questions/:id/answers   controllers.QuestionController.createAnswer(id: String)
+# Questionsanswer
+POST    /answers/:sid                 controllers.QuestionController.createAnswer(sid: String)
 
 # Vote
-POST    /votes/:id               controllers.VoteController.createVote(id: String)
+POST    /votes/:sid                  controllers.VoteController.createVote(sid: String)

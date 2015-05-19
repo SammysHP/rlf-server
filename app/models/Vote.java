@@ -44,6 +44,9 @@ public class Vote extends Model {
 
 		@EnumValue("R")
 		REQUEST,
+
+		@EnumValue("N")
+		NOREQUEST,
 	}
 
 	public static Finder find = new Finder(Long.class, Vote.class);
