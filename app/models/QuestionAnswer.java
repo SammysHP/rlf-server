@@ -16,7 +16,7 @@ import com.avaje.ebean.annotation.EnumValue;
 public class QuestionAnswer extends Model {
 
 	@Id
-	public String id;
+	public Long id;
 
 	@ManyToOne
 	@Constraints.Required
@@ -45,7 +45,8 @@ public class QuestionAnswer extends Model {
 		D,
 	}
 
-	public static Finder find = new Finder(Long.class, QuestionAnswer.class);
+	public static Finder<Long, QuestionAnswer> find = new Finder<Long, QuestionAnswer>(
+			Long.class, QuestionAnswer.class);
 
 	public QuestionAnswer(Session session, String owner, Answer answer) {
 		this.session = session;

@@ -17,7 +17,7 @@ import com.avaje.ebean.annotation.EnumValue;
 public class Vote extends Model {
 
 	@Id
-	public String id;
+	public Long id;
 
 	@ManyToOne
 	@Constraints.Required
@@ -49,7 +49,8 @@ public class Vote extends Model {
 		NOREQUEST,
 	}
 
-	public static Finder find = new Finder(Long.class, Vote.class);
+	public static Finder<Long, Vote> find = new Finder<Long, Vote>(Long.class,
+			Vote.class);
 
 	public Vote(Session session, String owner, Type type, Integer vote) {
 		this.session = session;

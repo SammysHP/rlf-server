@@ -10,6 +10,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import org.apache.commons.lang3.RandomStringUtils;
+
 import play.data.format.Formats;
 import play.data.validation.Constraints;
 import play.db.ebean.Model;
@@ -18,7 +20,7 @@ import play.db.ebean.Model;
 public class Session extends Model {
 
 	@Id
-	@Constraints.Max(6)
+	@Constraints.MinLength(5)
 	public String id;
 
 	@Constraints.Required
@@ -43,18 +45,33 @@ public class Session extends Model {
 	@Column(nullable = true)
 	public List<QuestionAnswer> questionAnswers = new ArrayList<>();
 
-	public static Finder find = new Finder(Long.class, Session.class);
+	public static Finder<String, Session> find = new Finder<String, Session>(
+			String.class, Session.class);
+
+	public static List<Session> findFromOwner(String owner) {
+		return Session.find.where().eq("owner", owner).findList();
+	}
 
 	public Session(String owner, String name) {
 		this.owner = owner;
 		this.name = name;
 		this.open = true;
+		// crappy easy readable random id
+		this.id = RandomStringUtils.randomAlphanumeric(5).toUpperCase();
 	}
 
-  public void resetAnswers() {
-    this.date = new Date();
-    for (QuestionAnswer a: this.questionAnswers) {
-      a.delete();
-    }
-  }
+	public void resetAnswers() {
+		this.date = new Date();
+		for (QuestionAnswer a : this.questionAnswers) {
+			a.delete();
+		}
+	}
+
+	public void addVote(Vote v) {
+		this.votes.add(v);
+	}
+
+	public void addQuestionAnswer(QuestionAnswer qa) {
+		this.questionAnswers.add(qa);
+	}
 }

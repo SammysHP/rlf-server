@@ -3,7 +3,8 @@
 # ~~~~
 
 # Session
-GET     /sessions/byowner/:owner     controllers.SessionController.getSessions(owner: String)
+GET     /sessions                    controllers.SessionController.getSessions
+GET     /sessions/byowner/:owner     controllers.SessionController.getSessionsByOwner(owner: String)
 GET     /sessions/:sid               controllers.SessionController.getSession(sid: String)
 POST    /sessions                    controllers.SessionController.createSession
 PUT     /sessions/:sid               controllers.SessionController.updateSession(sid: String)
