@@ -17,7 +17,8 @@ public class QuestionController extends Controller {
 			if (!answer.owner.isEmpty()) {
 				QuestionAnswer inserted = new QuestionAnswer(session,
 						answer.owner, answer.answer);
-				inserted.save();
+				session.addQuestionAnswer(inserted);
+				session.save();
 				return created(Json.toJson(inserted));
 			} else {
 				return badRequest("owner missing");

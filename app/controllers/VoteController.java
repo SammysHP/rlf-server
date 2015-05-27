@@ -15,7 +15,8 @@ public class VoteController extends Controller {
 			if (!vote.owner.isEmpty()) {
 				Vote inserted = new Vote(session, vote.owner, vote.type,
 						vote.vote);
-				inserted.save();
+				session.addVote(inserted);
+				session.save();
 				return created(Json.toJson(inserted));
 			} else {
 				return badRequest("owner missing");
