@@ -1,0 +1,31 @@
+- !!models.Session
+    id:         aaaaaa
+    owner:      s1owner
+    name:       Applab
+    date:       2015-05-25
+    open:       false
+    resetDate:  2015-05-25 13:13:00
+    votes:
+        - !!models.Vote
+            owner:      v1owner
+            vote:       0
+            type:       SPEED
+            date:       2015-05-25 13:14:00
+        - !!models.Vote
+            owner:      v2owner
+            vote:       2
+            type:       UNDERSTANDABILITY
+            date:       2015-05-25 13:14:00
+        - !!models.Vote
+            owner:      v3owner
+            vote:       0
+            type:       REQUEST
+            date:       2015-05-25 13:14:00
+
+- !!models.Session
+    id:         bbbbbb
+    owner:      s2owner
+    name:       SWQ
+    date:       2015-05-26
+    open:       true
+    resetDate:  2015-05-26 13:13:00

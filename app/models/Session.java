@@ -16,6 +16,8 @@ import play.data.format.Formats;
 import play.data.validation.Constraints;
 import play.db.ebean.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Session extends Model {
 
@@ -34,16 +36,18 @@ public class Session extends Model {
 
 	public Boolean open;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "session", cascade = CascadeType.ALL)
 	@Column(nullable = true)
-	public List<Vote> votes = new ArrayList<>();
+	public List<Vote> votes = new ArrayList<Vote>();
 
 	@Formats.DateTime(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date resetDate = new Date();
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "session", cascade = CascadeType.ALL)
 	@Column(nullable = true)
-	public List<QuestionAnswer> questionAnswers = new ArrayList<>();
+	public List<QuestionAnswer> questionAnswers = new ArrayList<QuestionAnswer>();
 
 	public static Finder<String, Session> find = new Finder<String, Session>(
 			String.class, Session.class);

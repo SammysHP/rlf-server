@@ -11,6 +11,7 @@ import play.data.validation.Constraints;
 import play.db.ebean.Model;
 
 import com.avaje.ebean.annotation.EnumValue;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class QuestionAnswer extends Model {
@@ -18,6 +19,7 @@ public class QuestionAnswer extends Model {
 	@Id
 	public Long id;
 
+	@JsonIgnore
 	@ManyToOne
 	@Constraints.Required
 	public Session session;
