@@ -9,8 +9,18 @@ import play.mvc.Result;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+/**
+ * Provides REST API calls for {@link Vote} creation
+ */
 public class VoteController extends Controller {
 
+	/**
+	 * Creates a new {@link Vote} for a {@link Session} from the request body
+	 * 
+	 * @param sid
+	 *            the ID of a Session
+	 * @return the Vote
+	 */
 	@BodyParser.Of(BodyParser.Json.class)
 	public static Result createVote(String sid) {
 		Session session = Session.find.byId(sid);

@@ -11,6 +11,7 @@ public class Global extends GlobalSettings {
 		Logger.info("Application has started");
 		// Check if the database is empty
 		if (Session.find.findRowCount() == 0) {
+			// Fill database with sample data
 			List list = (List) Yaml.load("test-data.yml");
 			Ebean.save(list);
 		}

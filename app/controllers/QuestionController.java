@@ -9,8 +9,19 @@ import play.mvc.Result;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+/**
+ * Provides REST API calls for {@link QuestionAnswer} creation
+ */
 public class QuestionController extends Controller {
 
+	/**
+	 * Creates a new {@link QuestionAnswer} for a {@link Session} from the
+	 * request body
+	 * 
+	 * @param sid
+	 *            the ID of a Session
+	 * @return the QuestionAnswer
+	 */
 	@BodyParser.Of(BodyParser.Json.class)
 	public static Result createAnswer(String sid) {
 		Session session = Session.find.byId(sid);
