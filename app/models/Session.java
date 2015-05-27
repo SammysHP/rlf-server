@@ -64,6 +64,12 @@ public class Session extends Model {
 		this.id = RandomStringUtils.randomAlphanumeric(5).toUpperCase();
 	}
 
+	public Session(String owner, String name, Boolean open, Date date) {
+		this(owner, name);
+		this.open = open;
+		this.date = date;
+	}
+
 	public void resetAnswers() {
 		this.date = new Date();
 		for (QuestionAnswer a : this.questionAnswers) {

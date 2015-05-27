@@ -2,12 +2,13 @@ package controllers;
 
 import java.util.List;
 
-import com.fasterxml.jackson.databind.JsonNode;
-
 import models.Session;
 import play.libs.Json;
+import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 public class SessionController extends Controller {
 
@@ -28,42 +29,37 @@ public class SessionController extends Controller {
 				.toJson(session));
 	}
 
+	@BodyParser.Of(BodyParser.Json.class)
 	public static Result createSession() {
 		JsonNode json = request().body().asJson();
-		if (json == null) {
-			return badRequest("Expecting Json data");
-		}
-
 		Session session = Json.fromJson(json, Session.class);
 		if (!(session.name.isEmpty() || session.owner.isEmpty())) {
-			Session inserted = new Session(session.owner, session.name);
-			inserted.save();
-			return created(Json.toJson(inserted));
+			Session sessionSaved = new Session(session.owner, session.name,
+					session.open, session.date);
+			sessionSaved.save();
+			return created(Json.toJson(sessionSaved));
 		} else {
 			return badRequest("name or owner missing");
 		}
 	}
 
+	@BodyParser.Of(BodyParser.Json.class)
 	public static Result updateSession(String sid) {
 		JsonNode json = request().body().asJson();
-		if (json == null) {
-			return badRequest("Expecting Json data");
-		}
-
 		Session session = Json.fromJson(json, Session.class);
 		Session sessionSaved = Session.find.byId(sid);
 		if (sessionSaved == null) {
 			return notFound("session not found");
 		}
-
-		if (sessionSaved.owner.equals(session.owner)) {
-			sessionSaved.name = session.name;
-			sessionSaved.date = session.date;
-			sessionSaved.save();
-			return noContent();
-		} else {
+		if (!sessionSaved.owner.equals(session.owner)) {
 			return forbidden("wrong owner");
 		}
+
+		sessionSaved.name = session.name;
+		sessionSaved.date = session.date;
+		sessionSaved.open = session.open;
+		sessionSaved.save();
+		return ok(Json.toJson(sessionSaved));
 	}
 
 	public static Result deleteSession(String sid, String owner) {

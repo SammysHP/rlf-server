@@ -1,18 +1,18 @@
 package controllers;
 
-import com.fasterxml.jackson.databind.JsonNode;
-
 import models.QuestionAnswer;
 import models.Session;
-import models.Vote;
 import play.libs.Json;
+import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 public class QuestionController extends Controller {
 
+	@BodyParser.Of(BodyParser.Json.class)
 	public static Result createAnswer(String sid) {
-        // TODO: open check
 		Session session = Session.find.byId(sid);
 		if (session == null) {
 			return notFound("session not found");
@@ -22,10 +22,6 @@ public class QuestionController extends Controller {
 		}
 
 		JsonNode json = request().body().asJson();
-		if (json == null) {
-			return badRequest("Expecting Json data");
-		}
-
 		QuestionAnswer answer = Json.fromJson(json, QuestionAnswer.class);
 		if (!answer.owner.isEmpty()) {
 			QuestionAnswer inserted = new QuestionAnswer(session, answer.owner,
