@@ -2,7 +2,9 @@ package controllers;
 
 import java.util.List;
 
+import models.QuestionAnswer;
 import models.Session;
+import models.Vote;
 import play.libs.Json;
 import play.mvc.BodyParser;
 import play.mvc.Controller;
