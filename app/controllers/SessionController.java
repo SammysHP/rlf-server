@@ -2,6 +2,8 @@ package controllers;
 
 import java.util.List;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import models.Session;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -27,8 +29,12 @@ public class SessionController extends Controller {
 	}
 
 	public static Result createSession() {
-		Session session = Json.fromJson(request().body().asJson(),
-				Session.class);
+		JsonNode json = request().body().asJson();
+		if (json == null) {
+			return badRequest("Expecting Json data");
+		}
+
+		Session session = Json.fromJson(json, Session.class);
 		if (!(session.name.isEmpty() || session.owner.isEmpty())) {
 			Session inserted = new Session(session.owner, session.name);
 			inserted.save();
@@ -39,67 +45,71 @@ public class SessionController extends Controller {
 	}
 
 	public static Result updateSession(String sid) {
-		Session session = Json.fromJson(request().body().asJson(),
-				Session.class);
+		JsonNode json = request().body().asJson();
+		if (json == null) {
+			return badRequest("Expecting Json data");
+		}
+
+		Session session = Json.fromJson(json, Session.class);
 		Session sessionSaved = Session.find.byId(sid);
-		if (sessionSaved != null) {
-			if (sessionSaved.owner == session.owner) {
-				sessionSaved.name = session.name;
-				sessionSaved.date = session.date;
-				sessionSaved.save();
-				return noContent();
-			} else {
-				return forbidden("wrong owner");
-			}
-		} else {
+		if (sessionSaved == null) {
 			return notFound("session not found");
+		}
+
+		if (sessionSaved.owner == session.owner) {
+			sessionSaved.name = session.name;
+			sessionSaved.date = session.date;
+			sessionSaved.save();
+			return noContent();
+		} else {
+			return forbidden("wrong owner");
 		}
 	}
 
 	public static Result deleteSession(String sid, String owner) {
 		Session session = Session.find.byId(sid);
-		if (session != null) {
-			if (session.owner == owner) {
-				session.delete();
-				return noContent();
-			} else {
-				return forbidden("wrong owner");
-			}
-		} else {
+		if (session == null) {
 			return notFound("session not found");
+		}
+
+		if (session.owner == owner) {
+			session.delete();
+			return noContent();
+		} else {
+			return forbidden("wrong owner");
 		}
 	}
 
 	public static Result getVotes(String sid) {
 		Session session = Session.find.byId(sid);
-		if (session != null) {
-			return ok(Json.toJson(session.votes));
-		} else {
+		if (session == null) {
 			return notFound("session not found");
+		} else {
+			return ok(Json.toJson(session.votes));
 		}
 	}
 
 	public static Result getAnswers(String sid) {
 		Session session = Session.find.byId(sid);
-		if (session != null) {
-			return ok(Json.toJson(session.questionAnswers));
-		} else {
+		if (session == null) {
 			return notFound("session not found");
+		} else {
+			return ok(Json.toJson(session.questionAnswers));
 		}
 	}
 
 	public static Result resetAnswers(String sid, String owner) {
 		Session session = Session.find.byId(sid);
-		if (session != null) {
-			if (session.owner == owner) {
-				session.resetAnswers();
-				session.save();
-				return noContent();
-			} else {
-				return forbidden("wrong owner");
-			}
-		} else {
+		if (session == null) {
 			return notFound("session not found");
+		}
+
+		if (session.owner == owner) {
+			session.resetAnswers();
+			session.save();
+			return noContent();
+		} else {
+			return forbidden("wrong owner");
 		}
 	}
 }
