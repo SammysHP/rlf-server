@@ -56,7 +56,7 @@ public class SessionController extends Controller {
 			return notFound("session not found");
 		}
 
-		if (sessionSaved.owner == session.owner) {
+		if (sessionSaved.owner.equals(session.owner)) {
 			sessionSaved.name = session.name;
 			sessionSaved.date = session.date;
 			sessionSaved.save();
@@ -72,7 +72,7 @@ public class SessionController extends Controller {
 			return notFound("session not found");
 		}
 
-		if (session.owner == owner) {
+		if (session.owner.equals(owner)) {
 			session.delete();
 			return noContent();
 		} else {
@@ -104,7 +104,7 @@ public class SessionController extends Controller {
 			return notFound("session not found");
 		}
 
-		if (session.owner == owner) {
+		if (session.owner.equals(owner)) {
 			session.resetAnswers();
 			session.save();
 			return noContent();
