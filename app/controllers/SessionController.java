@@ -47,7 +47,7 @@ public class SessionController extends Controller {
 				sessionSaved.name = session.name;
 				sessionSaved.date = session.date;
 				sessionSaved.save();
-				return ok();
+				return noContent();
 			} else {
 				return forbidden("wrong owner");
 			}
@@ -61,7 +61,7 @@ public class SessionController extends Controller {
 		if (session != null) {
 			if (session.owner == owner) {
 				session.delete();
-				return ok();
+				return noContent();
 			} else {
 				return forbidden("wrong owner");
 			}
@@ -94,7 +94,7 @@ public class SessionController extends Controller {
 			if (session.owner == owner) {
 				session.resetAnswers();
 				session.save();
-				return ok();
+				return noContent();
 			} else {
 				return forbidden("wrong owner");
 			}
