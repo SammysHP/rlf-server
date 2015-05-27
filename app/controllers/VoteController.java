@@ -15,6 +15,9 @@ public class VoteController extends Controller {
 		if (session == null) {
 			return notFound("session not found");
 		}
+		if (!session.open) {
+			return forbidden("session not open");
+		}
 
 		JsonNode json = request().body().asJson();
 		if (json == null) {

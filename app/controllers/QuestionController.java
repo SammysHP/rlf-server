@@ -12,9 +12,13 @@ import play.mvc.Result;
 public class QuestionController extends Controller {
 
 	public static Result createAnswer(String sid) {
+        // TODO: open check
 		Session session = Session.find.byId(sid);
 		if (session == null) {
 			return notFound("session not found");
+		}
+		if (!session.open) {
+			return forbidden("session not open");
 		}
 
 		JsonNode json = request().body().asJson();
