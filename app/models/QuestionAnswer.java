@@ -16,6 +16,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 public class QuestionAnswer extends Model {
 
+	private static final long serialVersionUID = 524971764571966919L;
+
 	@Id
 	public Long id;
 

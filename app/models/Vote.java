@@ -17,6 +17,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 public class Vote extends Model {
 
+	private static final long serialVersionUID = -8899299894433057522L;
+
 	@Id
 	public Long id;
 

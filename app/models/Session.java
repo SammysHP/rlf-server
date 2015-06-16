@@ -3,14 +3,13 @@ package models;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-
-import org.apache.commons.lang3.RandomStringUtils;
 
 import play.data.format.Formats;
 import play.data.validation.Constraints;
@@ -21,9 +20,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 public class Session extends Model {
 
+	private static final long serialVersionUID = -6908035273109180056L;
+
 	@Id
-	@Constraints.MinLength(5)
-	public String id;
+	@Constraints.MinLength(6)
+	public Integer id;
+
+	private final int IDMIN = 100000;
+	private final int IDMAX = 1000000;
 
 	@Constraints.Required
 	public String owner;
@@ -57,11 +61,18 @@ public class Session extends Model {
 	}
 
 	public Session(String owner, String name) {
+		// crappy easy readable random id
+		Random rnd = new Random();
+		Integer id;
+		do {
+			// try to find a unique id. not threadsafe...
+			id = rnd.nextInt(IDMAX - IDMIN) + IDMIN;
+		} while (Session.find.byId(id.toString()) != null);
+
+		this.id = id;
 		this.owner = owner;
 		this.name = name;
 		this.open = true;
-		// crappy easy readable random id
-		this.id = RandomStringUtils.randomAlphanumeric(5).toUpperCase();
 	}
 
 	public Session(String owner, String name, Boolean open, Date date) {
