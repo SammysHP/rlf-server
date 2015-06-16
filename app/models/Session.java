@@ -24,7 +24,7 @@ public class Session extends Model {
 
 	@Id
 	@Constraints.MinLength(6)
-	public Integer id;
+	public String id;
 
 	private final int IDMIN = 100000;
 	private final int IDMAX = 1000000;
@@ -69,7 +69,7 @@ public class Session extends Model {
 			id = rnd.nextInt(IDMAX - IDMIN) + IDMIN;
 		} while (Session.find.byId(id.toString()) != null);
 
-		this.id = id;
+		this.id = id.toString();
 		this.owner = owner;
 		this.name = name;
 		this.open = true;

@@ -1,4 +1,5 @@
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import models.QuestionAnswer;
 import models.Session;
 import models.Vote;
@@ -110,6 +111,7 @@ public class ModelTest {
 		Session s2 = new Session("owner1", "Session2");
 		s1.save();
 		s2.save();
-		assertEquals(5, s1.id.length());
+		assertEquals(6, s1.id.length());
+		assertNotEquals(s1.id, s2.id);
 	}
 }
