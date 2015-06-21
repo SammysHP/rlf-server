@@ -1,5 +1,5 @@
 - !!models.Session
-    id:         aaaaaa
+    id:         000000
     owner:      s1owner
     name:       Applab
     date:       2015-05-25
@@ -23,7 +23,7 @@
             date:       2015-05-25 13:14:00
 
 - !!models.Session
-    id:         bbbbbb
+    id:         000001
     owner:      s2owner
     name:       SWQ
     date:       2015-05-26
