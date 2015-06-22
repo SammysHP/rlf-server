@@ -24,7 +24,9 @@ import com.avaje.ebean.EbeanServer;
 import com.avaje.ebeaninternal.server.ddl.DdlGenerator;
 import com.fasterxml.jackson.databind.JsonNode;
 
+import controllers.QuestionController;
 import controllers.SessionController;
+import controllers.VoteController;
 
 public class ControllerTest {
 	public static FakeApplication app;
@@ -124,7 +126,7 @@ public class ControllerTest {
 		s1.save();
 		s2.save();
 
-		Result result = SessionController.getVotes(s1.id);
+		Result result = VoteController.getVotes(s1.id);
 		assertEquals(OK, status(result));
 		assertEquals("application/json", contentType(result));
 
@@ -150,7 +152,7 @@ public class ControllerTest {
 		s1.save();
 		s2.save();
 
-		Result result = SessionController.getAnswers(s1.id);
+		Result result = QuestionController.getAnswers(s1.id);
 		assertEquals(OK, status(result));
 		assertEquals("application/json", contentType(result));
 

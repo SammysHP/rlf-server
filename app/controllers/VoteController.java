@@ -42,4 +42,20 @@ public class VoteController extends Controller {
 			return badRequest("owner missing");
 		}
 	}
+
+	/**
+	 * Gets all {@link Vote}s for a {@link Session}
+	 * 
+	 * @param sid
+	 *            the ID of a Session
+	 * @return list of Votes
+	 */
+	public static Result getVotes(String sid) {
+		Session session = Session.find.byId(sid);
+		if (session == null) {
+			return notFound("session not found");
+		} else {
+			return ok(Json.toJson(session.votes));
+		}
+	}
 }

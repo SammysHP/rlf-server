@@ -9,14 +9,13 @@ GET     /sessions/:sid               controllers.SessionController.getSession(si
 POST    /sessions                    controllers.SessionController.createSession
 PUT     /sessions/:sid               controllers.SessionController.updateSession(sid: String)
 DELETE  /sessions/:sid/:owner        controllers.SessionController.deleteSession(sid: String, owner: String)
-GET     /sessions/:sid/votes         controllers.SessionController.getVotes(sid: String)
-GET     /sessions/:sid/answers       controllers.SessionController.getAnswers(sid: String)
-POST    /sessions/:sid/resetanswers/:owner  controllers.SessionController.resetAnswers(sid: String, owner: String)
-
-# TODO: aggregierte daten abfragen
 
 # Questionsanswer
-POST    /answers/:sid                 controllers.QuestionController.createAnswer(sid: String)
+GET     /sessions/:sid/answers       controllers.QuestionController.getAnswers(sid: String)
+POST    /sessions/:sid/answers       controllers.QuestionController.createAnswer(sid: String)
+POST    /sessions/:sid/resetanswers/:owner  controllers.QuestionController.resetAnswers(sid: String, owner: String)
 
 # Vote
-POST    /votes/:sid                  controllers.VoteController.createVote(sid: String)
+GET     /sessions/:sid/votes         controllers.VoteController.getVotes(sid: String)
+POST    /sessions/:sid/votes         controllers.VoteController.createVote(sid: String)
+# TODO: aggregierte daten abfragen

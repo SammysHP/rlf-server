@@ -2,9 +2,7 @@ package controllers;
 
 import java.util.List;
 
-import models.QuestionAnswer;
 import models.Session;
-import models.Vote;
 import play.libs.Json;
 import play.mvc.BodyParser;
 import play.mvc.Controller;
@@ -116,62 +114,6 @@ public class SessionController extends Controller {
 
 		if (session.owner.equals(owner)) {
 			session.delete();
-			return noContent();
-		} else {
-			return forbidden("wrong owner");
-		}
-	}
-
-	/**
-	 * Gets all {@link Vote}s for a {@link Session}
-	 * 
-	 * @param sid
-	 *            the ID of a Session
-	 * @return list of Votes
-	 */
-	public static Result getVotes(String sid) {
-		Session session = Session.find.byId(sid);
-		if (session == null) {
-			return notFound("session not found");
-		} else {
-			return ok(Json.toJson(session.votes));
-		}
-	}
-
-	/**
-	 * Gets all {@link QuestionAnswer}s for a {@link Session}
-	 * 
-	 * @param sid
-	 *            the ID of a Session
-	 * @return list of QuestionAnswers
-	 */
-	public static Result getAnswers(String sid) {
-		Session session = Session.find.byId(sid);
-		if (session == null) {
-			return notFound("session not found");
-		} else {
-			return ok(Json.toJson(session.questionAnswers));
-		}
-	}
-
-	/**
-	 * Deletes all {@link QuestionAnswer}s from a {@link Session}
-	 * 
-	 * @param sid
-	 *            the ID of a Session
-	 * @param owner
-	 *            the owner of the Session
-	 * @return HTTP 204 if reseted
-	 */
-	public static Result resetAnswers(String sid, String owner) {
-		Session session = Session.find.byId(sid);
-		if (session == null) {
-			return notFound("session not found");
-		}
-
-		if (session.owner.equals(owner)) {
-			session.resetAnswers();
-			session.save();
 			return noContent();
 		} else {
 			return forbidden("wrong owner");
