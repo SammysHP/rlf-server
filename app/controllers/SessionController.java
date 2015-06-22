@@ -22,7 +22,7 @@ public class SessionController extends Controller {
 	 */
 	public static Result getSessions() {
 		List<Session> sessions = Session.find.all();
-		return ok(Json.toJson(sessions)); //200
+		return ok(Json.toJson(sessions)); // 200
 	}
 
 	/**
@@ -34,7 +34,10 @@ public class SessionController extends Controller {
 	 */
 	public static Result getSessionsByOwner(String owner) {
 		List<Session> sessions = Session.findFromOwner(owner);
-		return ok(Json.toJson(sessions)); //200
+		for (Session s : sessions) {
+			s.owner = null; // censor owner id
+		}
+		return ok(Json.toJson(sessions)); // 200
 	}
 
 	/**
@@ -46,8 +49,12 @@ public class SessionController extends Controller {
 	 */
 	public static Result getSession(String sid) {
 		Session session = Session.find.byId(sid);
-		return session == null ? notFound("session not found") : ok(Json
-				.toJson(session)); //200 or 404
+		if (session == null) {
+			return notFound("session not found"); // 404
+		} else {
+			session.owner = null; // censor owner id
+			return ok(Json.toJson(session)); // 200
+		}
 	}
 
 	/**
@@ -64,9 +71,9 @@ public class SessionController extends Controller {
 			Session sessionSaved = new Session(session.owner, session.name,
 					session.open, session.date);
 			sessionSaved.save();
-			return created(Json.toJson(sessionSaved)); //201
+			return created(Json.toJson(sessionSaved)); // 201
 		} else {
-			return badRequest("name or owner missing"); //400
+			return badRequest("name or owner missing"); // 400
 		}
 	}
 
@@ -83,17 +90,17 @@ public class SessionController extends Controller {
 		Session session = Json.fromJson(json, Session.class);
 		Session sessionSaved = Session.find.byId(sid);
 		if (sessionSaved == null) {
-			return notFound("session not found"); //404
+			return notFound("session not found"); // 404
 		}
 		if (!sessionSaved.owner.equals(session.owner)) {
-			return unauthorized("wrong owner"); //401
+			return unauthorized("wrong owner"); // 401
 		}
 
 		sessionSaved.name = session.name;
 		sessionSaved.date = session.date;
 		sessionSaved.open = session.open;
 		sessionSaved.save();
-		return ok(Json.toJson(sessionSaved)); //200
+		return ok(Json.toJson(sessionSaved)); // 200
 	}
 
 	/**
@@ -108,14 +115,14 @@ public class SessionController extends Controller {
 	public static Result deleteSession(String sid, String owner) {
 		Session session = Session.find.byId(sid);
 		if (session == null) {
-			return notFound("session not found"); //404
+			return notFound("session not found"); // 404
 		}
 
 		if (session.owner.equals(owner)) {
 			session.delete();
-			return noContent(); //204
+			return noContent(); // 204
 		} else {
-			return unauthorized("wrong owner"); //401
+			return unauthorized("wrong owner"); // 401
 		}
 	}
 }

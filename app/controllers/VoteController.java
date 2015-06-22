@@ -25,10 +25,10 @@ public class VoteController extends Controller {
 	public static Result createVote(String sid) {
 		Session session = Session.find.byId(sid);
 		if (session == null) {
-			return notFound("session not found"); //404
+			return notFound("session not found"); // 404
 		}
 		if (!session.open) {
-			return forbidden("session not open"); //403
+			return forbidden("session not open"); // 403
 		}
 
 		JsonNode json = request().body().asJson();
@@ -37,9 +37,9 @@ public class VoteController extends Controller {
 			Vote inserted = new Vote(session, vote.owner, vote.type, vote.vote);
 			session.addVote(inserted);
 			session.save();
-			return created(Json.toJson(inserted)); //201
+			return created(Json.toJson(inserted)); // 201
 		} else {
-			return badRequest("owner missing"); //401
+			return badRequest("owner missing"); // 400
 		}
 	}
 
@@ -53,9 +53,12 @@ public class VoteController extends Controller {
 	public static Result getVotes(String sid) {
 		Session session = Session.find.byId(sid);
 		if (session == null) {
-			return notFound("session not found"); //404
+			return notFound("session not found"); // 404
 		} else {
-			return ok(Json.toJson(session.votes)); //200
+			for (Vote v : session.votes) {
+				v.owner = null; // censor owner id
+			}
+			return ok(Json.toJson(session.votes)); // 200
 		}
 	}
 }

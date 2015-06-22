@@ -26,10 +26,10 @@ public class QuestionController extends Controller {
 	public static Result createAnswer(String sid) {
 		Session session = Session.find.byId(sid);
 		if (session == null) {
-			return notFound("session not found"); //404
+			return notFound("session not found"); // 404
 		}
 		if (!session.open) {
-			return forbidden("session not open"); //403
+			return forbidden("session not open"); // 403
 		}
 
 		JsonNode json = request().body().asJson();
@@ -39,9 +39,9 @@ public class QuestionController extends Controller {
 					answer.answer);
 			session.addQuestionAnswer(inserted);
 			session.save();
-			return created(Json.toJson(inserted)); //201
+			return created(Json.toJson(inserted)); // 201
 		} else {
-			return badRequest("owner missing"); //400
+			return badRequest("owner missing"); // 400
 		}
 	}
 
@@ -55,9 +55,12 @@ public class QuestionController extends Controller {
 	public static Result getAnswers(String sid) {
 		Session session = Session.find.byId(sid);
 		if (session == null) {
-			return notFound("session not found"); //404
+			return notFound("session not found"); // 404
 		} else {
-			return ok(Json.toJson(session.questionAnswers)); //200
+			for (QuestionAnswer q : session.questionAnswers) {
+				q.owner = null; // censor owner id
+			}
+			return ok(Json.toJson(session.questionAnswers)); // 200
 		}
 	}
 
@@ -73,15 +76,15 @@ public class QuestionController extends Controller {
 	public static Result resetAnswers(String sid, String owner) {
 		Session session = Session.find.byId(sid);
 		if (session == null) {
-			return notFound("session not found"); //404
+			return notFound("session not found"); // 404
 		}
 
 		if (session.owner.equals(owner)) {
 			session.resetAnswers();
 			session.save();
-			return noContent(); //204
+			return noContent(); // 204
 		} else {
-			return unauthorized("wrong owner"); //401
+			return unauthorized("wrong owner"); // 401
 		}
 	}
 }
