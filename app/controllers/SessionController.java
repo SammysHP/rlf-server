@@ -22,7 +22,7 @@ public class SessionController extends Controller {
 	 */
 	public static Result getSessions() {
 		List<Session> sessions = Session.find.all();
-		return ok(Json.toJson(sessions));
+		return ok(Json.toJson(sessions)); //200
 	}
 
 	/**
@@ -35,7 +35,7 @@ public class SessionController extends Controller {
 	public static Result getSessionsByOwner(String owner) {
 		List<Session> sessions = Session.findFromOwner(owner);
 		return sessions.isEmpty() ? notFound("no sessions") : ok(Json
-				.toJson(sessions));
+				.toJson(sessions)); //200 or 404
 	}
 
 	/**
@@ -48,7 +48,7 @@ public class SessionController extends Controller {
 	public static Result getSession(String sid) {
 		Session session = Session.find.byId(sid);
 		return session == null ? notFound("session not found") : ok(Json
-				.toJson(session));
+				.toJson(session)); //200 or 404
 	}
 
 	/**
@@ -65,9 +65,9 @@ public class SessionController extends Controller {
 			Session sessionSaved = new Session(session.owner, session.name,
 					session.open, session.date);
 			sessionSaved.save();
-			return created(Json.toJson(sessionSaved));
+			return created(Json.toJson(sessionSaved)); //201
 		} else {
-			return badRequest("name or owner missing");
+			return badRequest("name or owner missing"); //400
 		}
 	}
 
@@ -84,17 +84,17 @@ public class SessionController extends Controller {
 		Session session = Json.fromJson(json, Session.class);
 		Session sessionSaved = Session.find.byId(sid);
 		if (sessionSaved == null) {
-			return notFound("session not found");
+			return notFound("session not found"); //404
 		}
 		if (!sessionSaved.owner.equals(session.owner)) {
-			return forbidden("wrong owner");
+			return unauthorized("wrong owner"); //401
 		}
 
 		sessionSaved.name = session.name;
 		sessionSaved.date = session.date;
 		sessionSaved.open = session.open;
 		sessionSaved.save();
-		return ok(Json.toJson(sessionSaved));
+		return ok(Json.toJson(sessionSaved)); //200
 	}
 
 	/**
@@ -109,14 +109,14 @@ public class SessionController extends Controller {
 	public static Result deleteSession(String sid, String owner) {
 		Session session = Session.find.byId(sid);
 		if (session == null) {
-			return notFound("session not found");
+			return notFound("session not found"); //404
 		}
 
 		if (session.owner.equals(owner)) {
 			session.delete();
-			return noContent();
+			return noContent(); //204
 		} else {
-			return forbidden("wrong owner");
+			return unauthorized("wrong owner"); //401
 		}
 	}
 }
