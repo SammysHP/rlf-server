@@ -7,6 +7,7 @@ import play.libs.Json;
 import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
+import play.api.Play;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -16,13 +17,17 @@ import com.fasterxml.jackson.databind.JsonNode;
 public class SessionController extends Controller {
 
 	/**
-	 * Gets details of all {@link Session}s
+	 * Gets details of all {@link Session}s (development mode only)
 	 * 
 	 * @return list of all Sessions
 	 */
 	public static Result getSessions() {
-		List<Session> sessions = Session.find.all();
-		return ok(Json.toJson(sessions)); // 200
+		if (Play.isProd(Play.current())) {
+			return notFound(); // 404 if in production
+		} else {
+			List<Session> sessions = Session.find.all();
+			return ok(Json.toJson(sessions)); // 200
+		}
 	}
 
 	/**
