@@ -34,8 +34,7 @@ public class SessionController extends Controller {
 	 */
 	public static Result getSessionsByOwner(String owner) {
 		List<Session> sessions = Session.findFromOwner(owner);
-		return sessions.isEmpty() ? notFound("no sessions") : ok(Json
-				.toJson(sessions)); //200 or 404
+		return ok(Json.toJson(sessions)); //200
 	}
 
 	/**
