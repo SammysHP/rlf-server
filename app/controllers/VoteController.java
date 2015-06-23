@@ -1,6 +1,7 @@
 package controllers;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import models.Session;
@@ -84,11 +85,16 @@ public class VoteController extends Controller {
 			VoteStats sUnderstandability = new VoteStats(
 					VoteStats.Type.UNDERSTANDABILITY, 0);
 			VoteStats sRequests = new VoteStats(VoteStats.Type.REQUEST, 0);
+			VoteStats sUsers = new VoteStats(VoteStats.Type.CURRENTUSERS, 0);
 			List<VoteStats> vsList = new ArrayList<VoteStats>();
 			vsList.add(sAll);
 			vsList.add(sSpeed);
 			vsList.add(sUnderstandability);
 			vsList.add(sRequests);
+			vsList.add(sUsers);
+
+			// distinct list of vote owners
+			HashSet<String> userIDs = new HashSet<String>();
 
 			// generate statistics
 			for (Vote v : session.votes) {
@@ -109,7 +115,9 @@ public class VoteController extends Controller {
 				default:
 					break;
 				}
+				userIDs.add(v.owner);
 			}
+			sUsers.value = userIDs.size();
 
 			return ok(Json.toJson(vsList)); // 200
 		}
