@@ -8,17 +8,17 @@
     votes:
         - !!models.Vote
             owner:      v1owner
-            vote:       0
+            value:       -1
             type:       SPEED
             date:       2015-05-25 13:14:00
         - !!models.Vote
             owner:      v2owner
-            vote:       2
+            value:       1
             type:       UNDERSTANDABILITY
             date:       2015-05-25 13:14:00
         - !!models.Vote
             owner:      v3owner
-            vote:       0
+            value:       1
             type:       REQUEST
             date:       2015-05-25 13:14:00
 
