@@ -18,4 +18,4 @@ POST    /sessions/:sid/resetanswers/:owner  controllers.QuestionController.reset
 # Vote
 GET     /sessions/:sid/votes         controllers.VoteController.getVotes(sid: String)
 POST    /sessions/:sid/votes         controllers.VoteController.createVote(sid: String)
-# TODO: aggregierte daten abfragen
+GET     /sessions/:sid/votestats     controllers.VoteController.getVoteStats(sid: String)

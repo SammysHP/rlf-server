@@ -5,30 +5,20 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 
 import play.data.format.Formats;
 import play.data.validation.Constraints;
 import play.db.ebean.Model;
 
 import com.avaje.ebean.annotation.EnumValue;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-public class Vote extends Model {
+public class VoteStats extends Model {
 
-	private static final long serialVersionUID = -8899299894433057522L;
+	private static final long serialVersionUID = 8660259739658830119L;
 
 	@Id
 	public Long id;
-
-	@JsonIgnore
-	@ManyToOne
-	@Constraints.Required
-	public Session session;
-
-	@Constraints.Required
-	public String owner;
 
 	@Formats.DateTime(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date date = new Date();
@@ -40,6 +30,9 @@ public class Vote extends Model {
 	public Type type;
 
 	public enum Type {
+		@EnumValue("A")
+		ALL,
+		
 		@EnumValue("S")
 		SPEED,
 
@@ -50,12 +43,10 @@ public class Vote extends Model {
 		REQUEST,
 	}
 
-	public static Finder<Long, Vote> find = new Finder<Long, Vote>(Long.class,
-			Vote.class);
+	public static Finder<Long, VoteStats> find = new Finder<Long, VoteStats>(Long.class,
+			VoteStats.class);
 
-	public Vote(Session session, String owner, Type type, Integer value) {
-		this.session = session;
-		this.owner = owner;
+	public VoteStats(Type type, Integer value) {
 		this.type = type;
 		this.value = value;
 	}
