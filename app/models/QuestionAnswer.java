@@ -1,6 +1,7 @@
 package models;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -51,6 +52,10 @@ public class QuestionAnswer extends Model {
 
 	public static Finder<Long, QuestionAnswer> find = new Finder<Long, QuestionAnswer>(
 			Long.class, QuestionAnswer.class);
+
+	public static List<QuestionAnswer> findFromOwner(String owner) {
+		return QuestionAnswer.find.where().eq("owner", owner).findList();
+	}
 
 	public QuestionAnswer(Session session, String owner, Answer answer) {
 		this.session = session;

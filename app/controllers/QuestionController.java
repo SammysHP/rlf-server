@@ -1,5 +1,7 @@
 package controllers;
 
+import java.util.List;
+
 import models.QuestionAnswer;
 import models.Session;
 import play.libs.Json;
@@ -16,7 +18,7 @@ public class QuestionController extends Controller {
 
 	/**
 	 * Creates a new {@link QuestionAnswer} for a {@link Session} from the
-	 * request body
+	 * request body and deletes the old answers from the same owner
 	 * 
 	 * @param sid
 	 *            the ID of a Session
@@ -35,6 +37,13 @@ public class QuestionController extends Controller {
 		JsonNode json = request().body().asJson();
 		QuestionAnswer answer = Json.fromJson(json, QuestionAnswer.class);
 		if (!answer.owner.isEmpty()) {
+			// Delete old answer(s)
+			List<QuestionAnswer> oldAnswers = QuestionAnswer
+					.findFromOwner(answer.owner);
+			for (QuestionAnswer qa : oldAnswers) {
+				qa.delete();
+			}
+
 			QuestionAnswer inserted = new QuestionAnswer(session, answer.owner,
 					answer.answer);
 			session.addQuestionAnswer(inserted);

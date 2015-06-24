@@ -110,6 +110,7 @@ public class VoteController extends Controller {
 					sAll.value = v.value;
 					break;
 				case REQUEST:
+					// TODO: consider only last 5minutes?
 					sRequests.value += v.value.compareTo(0);
 					break;
 				default:
