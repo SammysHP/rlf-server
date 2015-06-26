@@ -1,6 +1,7 @@
 package controllers;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
@@ -110,7 +111,10 @@ public class VoteController extends Controller {
 					sAll.value = v.value;
 					break;
 				case REQUEST:
-					// TODO: consider only last 5minutes?
+					// TODO: consider only last 5minutes
+					//Date date = new Date();
+					//long ms=date.getTime();
+					//Date updatedDate = new Date(ms - (5 * 60000)); //60000 is 1 minute equivalent in milliseconds
 					sRequests.value += v.value.compareTo(0);
 					break;
 				default:

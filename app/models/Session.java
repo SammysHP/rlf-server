@@ -27,7 +27,7 @@ public class Session extends Model {
 	public String id;
 
 	private final int IDMIN = 100000;
-	private final int IDMAX = 1000000;
+	private final int IDMAX = 999999;
 
 	@Constraints.Required
 	public String owner;
@@ -66,7 +66,7 @@ public class Session extends Model {
 		Integer id;
 		do {
 			// try to find a unique id. not threadsafe...
-			id = rnd.nextInt(IDMAX - IDMIN) + IDMIN;
+			id = rnd.nextInt(IDMAX+1 - IDMIN) + IDMIN;
 		} while (Session.find.byId(id.toString()) != null);
 
 		this.id = id.toString();

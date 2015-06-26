@@ -1,6 +1,7 @@
 package models;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -52,6 +53,14 @@ public class Vote extends Model {
 
 	public static Finder<Long, Vote> find = new Finder<Long, Vote>(Long.class,
 			Vote.class);
+
+	public static List<Vote> findAfterDate(Date date) {
+		return Vote.find.where().between("date", date, new Date()).findList();
+	}
+
+	public static List<Vote> findBeforeDate(Date date) {
+		return Vote.find.where().between("date", new Date(0), date).findList();
+	}
 
 	public Vote(Session session, String owner, Type type, Integer value) {
 		this.session = session;
