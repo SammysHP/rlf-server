@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import models.Session;
 import models.Vote;
 import models.VoteStats;
@@ -12,8 +14,6 @@ import play.libs.Json;
 import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
-
-import com.fasterxml.jackson.databind.JsonNode;
 
 /**
  * Provides REST API calls for {@link Vote} creation
@@ -47,9 +47,9 @@ public class VoteController extends Controller {
 				// session owner has the power to reset all
 				List<Vote> sessionvotes = new ArrayList<Vote>(session.votes);
 				for (Vote v : sessionvotes) {
-					if (v.type == Vote.Type.REQUEST && (v.owner == vote.owner || vote.owner == session.owner)) {
+					if (v.type == Vote.Type.REQUEST
+							&& (vote.owner.equals(v.owner) || vote.owner.equals(session.owner))) {
 						session.deleteVote(v);
-						v.delete();
 					}
 				}
 			} else {
@@ -96,8 +96,7 @@ public class VoteController extends Controller {
 		} else {
 			VoteStats sAll = new VoteStats(VoteStats.Type.ALL, 0);
 			VoteStats sSpeed = new VoteStats(VoteStats.Type.SPEED, 0);
-			VoteStats sUnderstandability = new VoteStats(
-					VoteStats.Type.UNDERSTANDABILITY, 0);
+			VoteStats sUnderstandability = new VoteStats(VoteStats.Type.UNDERSTANDABILITY, 0);
 			VoteStats sRequests = new VoteStats(VoteStats.Type.REQUEST, 0);
 			VoteStats sUsers = new VoteStats(VoteStats.Type.CURRENTUSERS, 0);
 			List<VoteStats> vsList = new ArrayList<VoteStats>();
@@ -115,9 +114,10 @@ public class VoteController extends Controller {
 				switch (v.type) {
 				case SPEED:
 					// TODO: aggregate
-					//Date tenMinutesAgo = new Date();
-					//tenMinutesAgo = new Date(tenMinutesAgo.getTime() - (10 * 60000)); //60000 is 1 minute equivalent in milliseconds
-					//if (v.date.after(tenMinutesAgo))
+					// Date tenMinutesAgo = new Date();
+					// tenMinutesAgo = new Date(tenMinutesAgo.getTime() - (10 *
+					// 60000)); //60000 is 1 minute equivalent in milliseconds
+					// if (v.date.after(tenMinutesAgo))
 					sSpeed.value = v.value;
 					break;
 				case UNDERSTANDABILITY:
