@@ -37,7 +37,7 @@ public class QuestionController extends Controller {
 		JsonNode json = request().body().asJson();
 		QuestionAnswer answer = Json.fromJson(json, QuestionAnswer.class);
 		if (!answer.owner.isEmpty()) {
-			// Delete old answer(s)
+			// Delete old answer(s) from same owner
 			List<QuestionAnswer> oldAnswers = QuestionAnswer
 					.findFromOwner(answer.owner);
 			for (QuestionAnswer qa : oldAnswers) {

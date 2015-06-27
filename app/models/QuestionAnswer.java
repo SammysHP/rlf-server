@@ -57,10 +57,6 @@ public class QuestionAnswer extends Model {
 		return QuestionAnswer.find.where().eq("owner", owner).findList();
 	}
 
-	public static List<QuestionAnswer> findAfterDate(Date date) {
-		return QuestionAnswer.find.where().between("date", date, new Date()).findList();
-	}
-
 	public QuestionAnswer(Session session, String owner, Answer answer) {
 		this.session = session;
 		this.owner = owner;

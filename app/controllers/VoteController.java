@@ -22,6 +22,7 @@ public class VoteController extends Controller {
 
 	/**
 	 * Creates a new {@link Vote} for a {@link Session} from the request body
+	 * The owner of a Session can reset all REQUESTs
 	 * 
 	 * @param sid
 	 *            the ID of a Session
@@ -41,8 +42,18 @@ public class VoteController extends Controller {
 		Vote vote = Json.fromJson(json, Vote.class);
 		if (!vote.owner.isEmpty()) {
 			Vote inserted = new Vote(session, vote.owner, vote.type, vote.value);
-			session.addVote(inserted);
-			session.save();
+			if (vote.type == Vote.Type.REQUEST && vote.value == -1) {
+				// remove all requests from this owner.
+				// session owner has the power to reset all
+				for (Vote v : session.votes) {
+					if (v.type == Vote.Type.REQUEST && v.owner == vote.owner || vote.owner == session.owner) {
+						v.delete();
+					}
+				}
+			} else {
+				session.addVote(inserted);
+				session.save();
+			}
 			return created(Json.toJson(inserted)); // 201
 		} else {
 			return badRequest("owner missing"); // 400
@@ -102,8 +113,10 @@ public class VoteController extends Controller {
 				switch (v.type) {
 				case SPEED:
 					// TODO: aggregate
+					//Date tenMinutesAgo = new Date();
+					//tenMinutesAgo = new Date(tenMinutesAgo.getTime() - (10 * 60000)); //60000 is 1 minute equivalent in milliseconds
+					//if (v.date.after(tenMinutesAgo))
 					sSpeed.value = v.value;
-					sAll.value = v.value;
 					break;
 				case UNDERSTANDABILITY:
 					// TODO: aggregate
@@ -111,11 +124,12 @@ public class VoteController extends Controller {
 					sAll.value = v.value;
 					break;
 				case REQUEST:
-					// TODO: consider only last 5minutes
-					//Date date = new Date();
-					//long ms=date.getTime();
-					//Date updatedDate = new Date(ms - (5 * 60000)); //60000 is 1 minute equivalent in milliseconds
-					sRequests.value += v.value.compareTo(0);
+					// consider only last 30sek
+					Date thirtySecAgo = new Date();
+					thirtySecAgo = new Date(thirtySecAgo.getTime() - 30000);
+					if (v.date.after(thirtySecAgo)) {
+						sRequests.value++;
+					}
 					break;
 				default:
 					break;
