@@ -45,8 +45,9 @@ public class VoteController extends Controller {
 			if (vote.type == Vote.Type.REQUEST && vote.value == -1) {
 				// remove all requests from this owner.
 				// session owner has the power to reset all
-				for (Vote v : session.votes) {
-					if (v.type == Vote.Type.REQUEST && v.owner == vote.owner || vote.owner == session.owner) {
+				List<Vote> sessionvotes = new ArrayList<Vote>(session.votes);
+				for (Vote v : sessionvotes) {
+					if (v.type == Vote.Type.REQUEST && (v.owner == vote.owner || vote.owner == session.owner)) {
 						session.deleteVote(v);
 					}
 				}

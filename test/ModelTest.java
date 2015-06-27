@@ -47,6 +47,26 @@ public class ModelTest {
 		assertEquals(0, Session.find.all().size());
 		assertEquals(0, Vote.find.all().size());
 	}
+	
+	@Test
+	public void testDeleteVotes() {
+		// Deletion of Votes
+		Session s1 = new Session("owner1", "Session1");
+		Vote v1 = new Vote(s1, "owner2", Vote.Type.SPEED, 1);
+		Vote v2 = new Vote(s1, "owner2", Vote.Type.UNDERSTANDABILITY, -1);
+		s1.addVote(v1);
+		s1.addVote(v2);
+		s1.save();
+
+		assertEquals(1, Session.find.all().size());
+		assertEquals(2, Vote.find.all().size());
+		assertEquals(2, s1.votes.size());
+		s1.deleteVote(v1);
+		s1.save();
+		assertEquals(1, Session.find.all().size());
+		assertEquals(1, Vote.find.all().size());
+		assertEquals(1, s1.votes.size());
+	}
 
 	@Test
 	public void testSessionAnswers() {
@@ -84,8 +104,10 @@ public class ModelTest {
 		assertEquals(2, QuestionAnswer.find.all().size());
 		assertEquals(2, s1.questionAnswers.size());
 		s1.resetAnswers();
+		s1.save();
 		assertEquals(1, Session.find.all().size());
 		assertEquals(0, QuestionAnswer.find.all().size());
+		assertEquals(0, s1.questionAnswers.size());
 	}
 
 	@Test
