@@ -49,6 +49,7 @@ public class VoteController extends Controller {
 				for (Vote v : sessionvotes) {
 					if (v.type == Vote.Type.REQUEST && (v.owner == vote.owner || vote.owner == session.owner)) {
 						session.deleteVote(v);
+						v.delete();
 					}
 				}
 			} else {

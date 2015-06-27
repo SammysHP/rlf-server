@@ -90,7 +90,6 @@ public class Session extends Model {
 
 	public void deleteVote(Vote v) {
 		this.votes.remove(v);
-		v.delete();
 	}
 
 	public void addVote(Vote v) {
