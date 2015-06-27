@@ -42,7 +42,6 @@ public class Session extends Model {
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "session", cascade = CascadeType.ALL)
-	@Column(nullable = true)
 	public List<Vote> votes = new ArrayList<Vote>();
 
 	@Formats.DateTime(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -86,6 +85,12 @@ public class Session extends Model {
 		for (QuestionAnswer a : this.questionAnswers) {
 			a.delete();
 		}
+		this.questionAnswers.clear();
+	}
+
+	public void deleteVote(Vote v) {
+		v.delete();
+		this.votes.remove(v);
 	}
 
 	public void addVote(Vote v) {

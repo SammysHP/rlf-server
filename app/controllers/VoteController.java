@@ -47,13 +47,13 @@ public class VoteController extends Controller {
 				// session owner has the power to reset all
 				for (Vote v : session.votes) {
 					if (v.type == Vote.Type.REQUEST && v.owner == vote.owner || vote.owner == session.owner) {
-						v.delete();
+						session.deleteVote(v);
 					}
 				}
 			} else {
 				session.addVote(inserted);
-				session.save();
 			}
+			session.save();
 			return created(Json.toJson(inserted)); // 201
 		} else {
 			return badRequest("owner missing"); // 400

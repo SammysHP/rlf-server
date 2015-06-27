@@ -8,12 +8,12 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.avaje.ebean.annotation.EnumValue;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import play.data.format.Formats;
 import play.data.validation.Constraints;
 import play.db.ebean.Model;
-
-import com.avaje.ebean.annotation.EnumValue;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Vote extends Model {
