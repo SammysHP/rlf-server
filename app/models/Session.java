@@ -93,6 +93,11 @@ public class Session extends Model {
 		v.delete();
 	}
 
+	public void deleteAnswer(QuestionAnswer q) {
+		this.questionAnswers.remove(q);
+		q.delete();
+	}
+
 	public void addVote(Vote v) {
 		this.votes.add(v);
 	}

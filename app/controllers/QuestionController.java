@@ -1,5 +1,6 @@
 package controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import models.QuestionAnswer;
@@ -38,10 +39,11 @@ public class QuestionController extends Controller {
 		QuestionAnswer answer = Json.fromJson(json, QuestionAnswer.class);
 		if (!answer.owner.isEmpty()) {
 			// Delete old answer(s) from same owner
-			List<QuestionAnswer> oldAnswers = QuestionAnswer
-					.findFromOwner(answer.owner);
+			List<QuestionAnswer> oldAnswers = new ArrayList<QuestionAnswer>(session.questionAnswers);
 			for (QuestionAnswer qa : oldAnswers) {
-				qa.delete();
+				if (qa.owner.equals(answer.owner)) {
+					session.deleteAnswer(qa);
+				}
 			}
 
 			QuestionAnswer inserted = new QuestionAnswer(session, answer.owner,
