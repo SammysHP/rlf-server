@@ -94,6 +94,7 @@ public class VoteController extends Controller {
 		if (session == null) {
 			return notFound("session not found"); // 404
 		} else {
+			// VoteStats objects to return
 			VoteStats sAll = new VoteStats(VoteStats.Type.ALL, 0);
 			VoteStats sSpeed = new VoteStats(VoteStats.Type.SPEED, 0);
 			VoteStats sUnderstandability = new VoteStats(VoteStats.Type.UNDERSTANDABILITY, 0);
@@ -109,42 +110,47 @@ public class VoteController extends Controller {
 			// distinct list of vote owners
 			HashSet<String> userIDs = new HashSet<String>();
 
-			// generate statistics
+			// some dates in the past
+			Date thirtySecAgo = new Date();
+			thirtySecAgo = new Date(thirtySecAgo.getTime() - 30000);
+			Date tenMinutesAgo = new Date();
+			tenMinutesAgo = new Date(tenMinutesAgo.getTime() - (10 * 60000));
+
+			// get all votes of last 10 minutes
 			for (Vote v : session.votes) {
-				switch (v.type) {
-				case SPEED:
-					// TODO: aggregate
-					// Date tenMinutesAgo = new Date();
-					// tenMinutesAgo = new Date(tenMinutesAgo.getTime() - (10 *
-					// 60000)); //60000 is 1 minute equivalent in milliseconds
-					// if (v.date.after(tenMinutesAgo))
-					sSpeed.value = v.value;
-					break;
-				case UNDERSTANDABILITY:
-					// TODO: aggregate
-					sUnderstandability.value = v.value;
-					sAll.value = v.value;
-					break;
-				case REQUEST:
-					// consider only last 30sek
-					Date thirtySecAgo = new Date();
-					thirtySecAgo = new Date(thirtySecAgo.getTime() - 30000);
-					if (v.date.after(thirtySecAgo)) {
-						sRequests.value++;
+				if (v.date.after(tenMinutesAgo)) {
+					switch (v.type) {
+					case SPEED:
+						sSpeed.value = v.value;
+						break;
+					case UNDERSTANDABILITY:
+						sUnderstandability.value = v.value;
+						break;
+					case REQUEST:
+						// consider only last 30sek
+						if (v.date.after(thirtySecAgo)) {
+							sRequests.value++;
+						}
+						break;
+					default:
+						break;
 					}
-					break;
-				default:
-					break;
+					userIDs.add(v.owner);
 				}
-				userIDs.add(v.owner);
 			}
+
+			// generate statistics
 			sUsers.value = userIDs.size();
-			
-			// give positive stats if no users yet
 			if (sUsers.value == 0) {
+				// give positive statistics if no users yet
 				sSpeed.value = 50;
-				sAll.value = 100;
 				sUnderstandability.value = 100;
+				sAll.value = 100;
+			} else {
+				// arithmetic mean of votes
+				sSpeed.value = sSpeed.value / sUsers.value;
+				sUnderstandability.value = sUnderstandability.value / sUsers.value;
+				sAll.value = (100 - (Math.abs(sSpeed.value - 50) * 2) + sUnderstandability.value) / 2;
 			}
 
 			return ok(Json.toJson(vsList)); // 200
