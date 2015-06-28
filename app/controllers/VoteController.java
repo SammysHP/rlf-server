@@ -139,6 +139,13 @@ public class VoteController extends Controller {
 				userIDs.add(v.owner);
 			}
 			sUsers.value = userIDs.size();
+			
+			// give positive stats if no users yet
+			if (sUsers.value == 0) {
+				sSpeed.value = 50;
+				sAll.value = 100;
+				sUnderstandability.value = 100;
+			}
 
 			return ok(Json.toJson(vsList)); // 200
 		}
