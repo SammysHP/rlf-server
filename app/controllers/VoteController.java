@@ -121,10 +121,10 @@ public class VoteController extends Controller {
 				if (v.date.after(tenMinutesAgo)) {
 					switch (v.type) {
 					case SPEED:
-						sSpeed.value = v.value;
+						sSpeed.value += v.value;
 						break;
 					case UNDERSTANDABILITY:
-						sUnderstandability.value = v.value;
+						sUnderstandability.value += v.value;
 						break;
 					case REQUEST:
 						// consider only last 30sek
@@ -150,7 +150,12 @@ public class VoteController extends Controller {
 				// arithmetic mean of votes
 				sSpeed.value = sSpeed.value / sUsers.value;
 				sUnderstandability.value = sUnderstandability.value / sUsers.value;
-				sAll.value = (100 - (Math.abs(sSpeed.value - 50) * 2) + sUnderstandability.value) / 2;
+				if (20 < sSpeed.value || sSpeed.value > 80 || sUnderstandability.value < 20) {
+					// give negative overall rating, is one value is very bad
+					sAll.value = 0;
+				} else {
+					sAll.value = (100 - (Math.abs(sSpeed.value - 50) * 2) + sUnderstandability.value) / 2;
+				}
 			}
 
 			return ok(Json.toJson(vsList)); // 200
