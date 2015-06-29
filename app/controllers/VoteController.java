@@ -108,7 +108,9 @@ public class VoteController extends Controller {
 			vsList.add(sUsers);
 
 			// distinct list of vote owners
-			HashSet<String> userIDs = new HashSet<String>();
+			HashSet<String> usersAll = new HashSet<String>();
+			HashSet<String> usersSpeed = new HashSet<String>();
+			HashSet<String> usersUnderstand = new HashSet<String>();
 
 			// some dates in the past
 			Date thirtySecAgo = new Date();
@@ -121,10 +123,16 @@ public class VoteController extends Controller {
 				if (v.date.after(tenMinutesAgo)) {
 					switch (v.type) {
 					case SPEED:
-						sSpeed.value += v.value;
+						if (!usersSpeed.contains(v.owner)) {
+							usersSpeed.add(v.owner);
+							sSpeed.value += v.value;
+						}
 						break;
 					case UNDERSTANDABILITY:
-						sUnderstandability.value += v.value;
+						if (!usersUnderstand.contains(v.owner)) {
+							usersUnderstand.add(v.owner);
+							sUnderstandability.value += v.value;
+						}
 						break;
 					case REQUEST:
 						// consider only last 30sek
@@ -135,27 +143,30 @@ public class VoteController extends Controller {
 					default:
 						break;
 					}
-					userIDs.add(v.owner);
+					usersAll.add(v.owner);
 				}
 			}
 
 			// generate statistics
-			sUsers.value = userIDs.size();
-			if (sUsers.value == 0) {
+			sUsers.value = usersAll.size();
+			if (usersSpeed.size() > 0) {
+				sSpeed.value = sSpeed.value / usersSpeed.size();
+			} else {
 				// give positive statistics if no users yet
 				sSpeed.value = 50;
-				sUnderstandability.value = 100;
-				sAll.value = 100;
+			}
+			if (usersUnderstand.size() > 0) {
+				sUnderstandability.value = sUnderstandability.value / usersUnderstand.size();
 			} else {
-				// arithmetic mean of votes
-				sSpeed.value = sSpeed.value / sUsers.value;
-				sUnderstandability.value = sUnderstandability.value / sUsers.value;
-				if (20 < sSpeed.value || sSpeed.value > 80 || sUnderstandability.value < 20) {
-					// give negative overall rating, is one value is very bad
-					sAll.value = 0;
-				} else {
-					sAll.value = (100 - (Math.abs(sSpeed.value - 50) * 2) + sUnderstandability.value) / 2;
-				}
+				// give positive statistics if no users yet
+				sUnderstandability.value = 100;
+			}
+			// overall rating: arithmetic mean of votes
+			if (20 < sSpeed.value || sSpeed.value > 80 || sUnderstandability.value < 20) {
+				// give negative overall rating, is one value is very bad
+				sAll.value = 0;
+			} else {
+				sAll.value = (100 - (Math.abs(sSpeed.value - 50) * 2) + sUnderstandability.value) / 2;
 			}
 
 			return ok(Json.toJson(vsList)); // 200
