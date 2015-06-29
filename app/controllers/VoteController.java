@@ -166,7 +166,7 @@ public class VoteController extends Controller {
 				sUnderstandability.value = 100;
 			}
 			// overall rating: arithmetic mean of votes
-			if (20 < sSpeed.value || sSpeed.value > 80 || sUnderstandability.value < 20) {
+			if (sSpeed.value < 20 || sSpeed.value > 80 || sUnderstandability.value < 20) {
 				// give negative overall rating, is one value is very bad
 				sAll.value = 0;
 			} else {
