@@ -119,7 +119,8 @@ public class VoteController extends Controller {
 			tenMinutesAgo = new Date(tenMinutesAgo.getTime() - (10 * 60000));
 
 			// get all votes of last 10 minutes
-			for (Vote v : session.votes) {
+			List<Vote> sessionVotes = Vote.find.where().eq("session", session).orderBy("date desc").findList();
+			for (Vote v : sessionVotes) {
 				if (v.date.after(tenMinutesAgo)) {
 					switch (v.type) {
 					case SPEED:
@@ -144,6 +145,9 @@ public class VoteController extends Controller {
 						break;
 					}
 					usersAll.add(v.owner);
+				} else {
+					// do not process old votes
+					break;
 				}
 			}
 
