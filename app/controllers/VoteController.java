@@ -100,11 +100,13 @@ public class VoteController extends Controller {
 			VoteStats sUnderstandability = new VoteStats(VoteStats.Type.UNDERSTANDABILITY, 0);
 			VoteStats sRequests = new VoteStats(VoteStats.Type.REQUEST, 0);
 			VoteStats sUsers = new VoteStats(VoteStats.Type.CURRENTUSERS, 0);
+			VoteStats sBreakRequests = new VoteStats(VoteStats.Type.BREAK, 0);
 			List<VoteStats> vsList = new ArrayList<VoteStats>();
 			vsList.add(sAll);
 			vsList.add(sSpeed);
 			vsList.add(sUnderstandability);
 			vsList.add(sRequests);
+			vsList.add(sBreakRequests);
 			vsList.add(sUsers);
 
 			// distinct list of vote owners
@@ -139,6 +141,12 @@ public class VoteController extends Controller {
 						// consider only last 30sek
 						if (v.date.after(thirtySecAgo)) {
 							sRequests.value++;
+						}
+						break;
+					case BREAK:
+						// consider only last 10min
+						if (v.date.after(tenMinutesAgo)) {
+							sBreakRequests.value++;
 						}
 						break;
 					default:
