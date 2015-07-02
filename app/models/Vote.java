@@ -49,6 +49,9 @@ public class Vote extends Model {
 
 		@EnumValue("R")
 		REQUEST,
+		
+		@EnumValue("B")
+		BREAK,
 	}
 
 	public static Finder<Long, Vote> find = new Finder<Long, Vote>(Long.class,

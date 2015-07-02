@@ -20,6 +20,7 @@ public class VoteStats extends Model {
 		UNDERSTANDABILITY,
 		REQUEST,
 		CURRENTUSERS,
+		BREAK,
 	}
 
 	public VoteStats(Type type, Integer value) {
