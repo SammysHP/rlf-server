@@ -42,13 +42,12 @@ public class VoteController extends Controller {
 		Vote vote = Json.fromJson(json, Vote.class);
 		if (!vote.owner.isEmpty()) {
 			Vote inserted = new Vote(session, vote.owner, vote.type, vote.value);
-			if (vote.type == Vote.Type.REQUEST && vote.value == -1) {
-				// remove all requests from this owner.
+			if (vote.value == -1 && (vote.type == Vote.Type.REQUEST || vote.type == Vote.Type.BREAK)) {
+				// remove all requests or breaks from this owner.
 				// session owner has the power to reset all
 				List<Vote> sessionvotes = new ArrayList<Vote>(session.votes);
 				for (Vote v : sessionvotes) {
-					if (v.type == Vote.Type.REQUEST
-							&& (vote.owner.equals(v.owner) || vote.owner.equals(session.owner))) {
+					if (v.type == vote.type && (vote.owner.equals(v.owner) || vote.owner.equals(session.owner))) {
 						session.deleteVote(v);
 					}
 				}
